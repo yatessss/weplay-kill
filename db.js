@@ -83,7 +83,7 @@ function defineModel(name, attributes) {
     hooks: {
       beforeValidate: function (obj) {
         let now = Date.now();
-        if (!obj.isNewRecord) {
+        if (obj.isNewRecord) {
           console.log('will create entity...' + obj);
           if (!obj.id) {
             obj.id = generateId();
@@ -101,7 +101,7 @@ function defineModel(name, attributes) {
   });
 }
 
-const TYPES = ['STRING', 'INTEGER', 'BIGINT', 'TEXT', 'DOUBLE', 'DATEONLY', 'BOOLEAN'];
+const TYPES = ['STRING', 'INTEGER', 'BIGINT', 'TEXT', 'DOUBLE', 'DATEONLY', 'BOOLEAN', 'ARRAY', 'DECIMAL', 'RANGE'];
 
 var exp = {
   defineModel: defineModel,
