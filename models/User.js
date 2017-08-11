@@ -15,16 +15,50 @@ module.exports = db.defineModel('users', {
   matches_total_num: {
     type: db.BIGINT(11)
   },
-  // 各类角色次数
-  various_roles: {
-    type: db.ARRAY(db.RANGE(db.INTEGER)),
-    allowNull: true
+  mathes_win_num: {
+    type: db.BIGINT(11)
   },
-  email: {
-    type: db.RANGE(db.INTEGER),
-    defaultValue: {'1':1}
+  mathes_lose_num: {
+    type: db.BIGINT(11)
   },
-  passwd: db.STRING(100),
-  name: db.STRING(100),
-  gender: db.BOOLEAN
+  role_good_win_num: {
+    type: db.BIGINT(11)
+  },
+  role_bad_lose_num: {
+    type: db.BIGINT(11)
+  },
+  role_good_num: {
+    type: db.BIGINT(11)
+  },
+  role_bad_num: {
+    type: db.BIGINT(11)
+  },
+  // 狼人次数
+  role_werewolves: {
+    type: db.BIGINT(11)
+  },
+  // 平民次数
+  role_villagers: {
+    type: db.BIGINT(11)
+  },
+  // 白痴次数
+  role_idiot: {
+    type: db.BIGINT(11)
+  },
+  // 守卫次数
+  role_savior: {
+    type: db.BIGINT(11)
+  },
+  // 女巫次数
+  role_witch: {
+    type: db.BIGINT(11)
+  },
+  // 预言家次数
+  role_seer: {
+    type: db.BIGINT(11)
+  },
+  // 猎人次数
+  role_hunter: {
+    type: db.BIGINT(11)
+  }
 });

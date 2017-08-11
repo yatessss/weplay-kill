@@ -22,7 +22,7 @@ var now = Date.now();
     gender: false,
     birth: '2008-08-08'
   });
-  console.log('created: ' + JSON.stringify(dog));
+  console.log('创建了: ' + JSON.stringify(dog));
 })();
 
 (async () => {
@@ -32,30 +32,36 @@ var now = Date.now();
     name: '苗苗',
     gender: true
   });
-  console.log('created: ' + JSON.stringify(people));
+  console.log('创建了: ' + JSON.stringify(people));
 })();
 
 
 (async () => {
-  var pets = await Pet.findAll({
+  var pets = await Pet.update({
+    id: 'd-11111',
+    name: '苗苗',
+    gender: false,
+    birth: '2008-08-10'
+  },{
     where: {
-      name: 'Odie'
-    }
+      id: 'd-11111'
+    },
+    isNewRecord: true
   });
-  console.log(`find ${pets.length} pets:`);
+  console.log(`更新了 ${pets.length} pets:`);
   for (let p of pets) {
     console.log(JSON.stringify(p));
   }
 })();
 
 (async () => {
-  var pets = await User.findAll({
+  var users = await User.findAll({
     where: {
       name: 'Odie'
     }
   });
-  console.log(`find ${pets.length} pets:`);
-  for (let p of pets) {
+  console.log(`找到了 ${users.length} User:`);
+  for (let p of users) {
     console.log(JSON.stringify(p));
   }
 })();
