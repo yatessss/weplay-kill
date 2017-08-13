@@ -3,7 +3,7 @@
  */
 const db = require('../db');
 
-// userBaseInfo 用户基本信息
+// userBaseInfo 用户比赛基本信息
 module.exports = db.defineModel('users', {
   // 用户openid
   open_id: {
