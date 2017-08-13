@@ -101,7 +101,7 @@ function defineModel(name, attributes) {
   });
 }
 
-const TYPES = ['STRING', 'INTEGER', 'BIGINT', 'TEXT', 'DOUBLE', 'DATEONLY', 'BOOLEAN', 'ARRAY', 'DECIMAL', 'RANGE'];
+const TYPES = ['STRING', 'INTEGER', 'BIGINT', 'TEXT', 'DOUBLE', 'DATEONLY', 'BOOLEAN'];
 
 var exp = {
   defineModel: defineModel,
