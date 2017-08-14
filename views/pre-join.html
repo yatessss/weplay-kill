@@ -75,6 +75,28 @@
     </div>
 </div>
 <script type="text/javascript">
+  function GetRequest() {
+    var url = location.search; //获取url中"?"符后的字串
+    var theRequest = new Object();
+    if (url.indexOf("?") != -1) {
+      var str = url.substr(1);
+      strs = str.split("&");
+      for(var i = 0; i < strs.length; i ++) {
+        theRequest[strs[i].split("=")[0]]=unescape(strs[i].split("=")[1]);
+      }
+    }
+    return theRequest;
+  }
+  var appid = 'wx470ba9b3c2e89e1f'
+  $(function() {
+    if (GetRequest().code) {
+      console.log('已经跳转回来')
+    } else {
+      location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+ appid +'&redirect_uri='+encodeURIComponent('http://zkibwu.natappfree.cc/pre-join/')+'&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
+    }
+  });
+
+
   $('#select-role ul li').on('click', function (event) {
     $('#role-button').text($(this).text())
   });
