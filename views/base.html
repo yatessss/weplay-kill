@@ -44,5 +44,27 @@
     </div>
 </footer>
 </body>
+<script type="text/javascript">
+  Function.prototype.getMultiLine = function () {
+    var lines = new String(this);
+    lines = lines.substring(lines.indexOf("/*") + 3, lines.lastIndexOf("*/"));
+    return lines;
+  }
+  var string = function () {
+      /*
 
+       ██╗    ██╗███████╗██████╗  █████╗ ███╗   ██╗██╗  ██╗        ██╗    ██╗███████╗██████╗ ██╗      █████╗ ██╗   ██╗
+       ██║    ██║██╔════╝██╔══██╗██╔══██╗████╗  ██║██║ ██╔╝        ██║    ██║██╔════╝██╔══██╗██║     ██╔══██╗╚██╗ ██╔╝
+       ██║ █╗ ██║█████╗  ██████╔╝███████║██╔██╗ ██║█████╔╝         ██║ █╗ ██║█████╗  ██████╔╝██║     ███████║ ╚████╔╝
+       ██║███╗██║██╔══╝  ██╔══██╗██╔══██║██║╚██╗██║██╔═██╗         ██║███╗██║██╔══╝  ██╔═══╝ ██║     ██╔══██║  ╚██╔╝
+       ╚███╔███╔╝███████╗██████╔╝██║  ██║██║ ╚████║██║  ██╗        ╚███╔███╔╝███████╗██║     ███████╗██║  ██║   ██║
+        ╚══╝╚══╝ ╚══════╝╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝         ╚══╝╚══╝ ╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝
+
+       */
+  }
+  window.console.info(string.getMultiLine());
+  console.log("%c    ","background: url(http://aotu.io/assets/img/o2logo.png) no-repeat left center;font-size: 60px;","\n");
+
+
+</script>
 </html>
