@@ -14,6 +14,7 @@ const app = new Koa();
 // 导入controller middleware:
 const controller = require('./controller');
 const templating = require('./templating');
+const rest = require('./rest');
 const nunjucks = require('nunjucks');
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -34,6 +35,7 @@ if (! isProduction) {
 }
 
 app.use(bodyParser());
+app.use(rest.restify());
 
 app.use(templating('views', {
   noCache: !isProduction,

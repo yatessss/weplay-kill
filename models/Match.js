@@ -12,8 +12,5 @@ module.exports = db.defineModel('matches', {
   },
   room_size: {
     type: db.BIGINT(11)
-  },
-  room_people: {
-    type: db.STRING(1000),
   }
 });

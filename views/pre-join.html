@@ -10,7 +10,7 @@
                 <h4 class="modal-title" id="joinModalLabel">加入房间</h4>
             </div>
             <div class="modal-body">
-                <form>
+                <form action="/api/join" method="post">
                     <div class="form-group">
                         <label for="room-id" class="control-label">输入房间号:</label>
                         <input type="text" class="form-control" id="room-id">
@@ -20,7 +20,10 @@
                         <input type="text" class="form-control" id="user-num">
                     </div>
                     <div class="form-group" id="select-role">
-                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" id="role-button">选择角色</button>
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" id="role-button">
+                            选择角色
+                            <span class="caret"></span>
+                        </button>
                         <ul class="dropdown-menu">
                             <li>
                                 <a href="#" data-role="role_villagers">平民</a></li>
@@ -57,16 +60,16 @@
                 <h4 class="modal-title" id="exampleModalLabel">创建房间</h4>
             </div>
             <div class="modal-body">
-                <form>
+                <form action="/api/create" method="post">
                     <div class="form-group">
                         <label for="room-size" class="control-label">输入房间人数:</label>
-                        <input type="text" class="form-control" id="room-size">
+                        <input type="text" name="room_size" class="form-control" id="room-size">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="submit" class="btn btn-primary" id="create-room">确定</button>
                     </div>
                 </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary">确定</button>
             </div>
         </div>
     </div>
@@ -75,6 +78,23 @@
   $('#select-role ul li').on('click', function (event) {
     $('#role-button').text($(this).text())
   });
+
+//  $('#create-room').click(function() {
+//    let room_size = $('#room-size')[0].value
+//    console.log(room_size)
+//    $.ajax({
+//      url: 'http://localhost:3000/api/create',
+//      type: 'POST',
+//      data: {
+//        room_size: room_size
+//      },
+//      dataType: 'json',
+//      success () {
+//        console.log('发送成功')
+//      }
+//    })
+//  })
+
   $('#select-role').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget) // Button that triggered the modal
     var recipient = button.data('whatever')
