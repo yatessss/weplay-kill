@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/yatessss/weplay-kill#readme",
   "dependencies": {
+    "axios": "^0.16.2",
     "koa": "^2.3.0",
     "koa-bodyparser": "3.2.0",
     "koa-router": "7.0.0",
