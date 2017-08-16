@@ -18,9 +18,10 @@ module.exports = {
       // 是否是REST API前缀?
       if (ctx.request.path.startsWith(pathPrefix)) {
         // 绑定rest()方法:
-        ctx.rest = (data) => {
-          ctx.response.type = 'application/json';
-          ctx.response.body = data;
+        ctx.rest = (data, token) => {
+          ctx.type = 'application/json';
+          ctx.body = data;
+          ctx.set('Authorization', token);
         }
         await next();
       } else {

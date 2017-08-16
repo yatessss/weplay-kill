@@ -7,6 +7,7 @@ const Koa = require('koa');
 const bodyParser = require('koa-bodyparser');
 // 注意require('koa-router')返回的是函数:
 const router = require('koa-router')();
+const koajwt = require('koa-jwt');
 
 // 创建一个Koa对象表示web app本身:
 const app = new Koa();
@@ -42,6 +43,9 @@ app.use(templating('views', {
   watch: !isProduction
 }));
 
+app.use(koajwt({
+  secret:'wsd'
+}).unless({path: [/^\/api\/getCode/,/^\/pre-join/]}));
 
 app.use(controller());
 

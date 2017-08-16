@@ -4,6 +4,7 @@
 const config = require('../config');
 const model = require('../model');
 const axios = require('axios')
+const jwt = require('jsonwebtoken');
 
 let Match = model.Match
 
@@ -57,8 +58,21 @@ module.exports = {
       })
     }).then((response)=> {
       console.log('最后的数据', response)
+      /**
+       * { openid: 'o6xIfwDVXgk6N-CZGx-N3QYQvkr8',
+        nickname: 'xxx',
+        sex: 1,
+        language: 'zh_CN',
+        city: 'xxx',
+        province: 'xxx',
+        country: 'xxx',
+        headimgurl: 'xxxxx',
+        privilege: [] }
+       */
+
       res = response.data
     });
-    ctx.rest(res);
+    var token = jwt.sign({openid: res.openid},'wsd',{expiresIn: 24 * 60 * 60}); /* 1 days */
+    ctx.rest(res, token);
   }
 };
