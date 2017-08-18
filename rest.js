@@ -11,6 +11,10 @@
  */
 
 module.exports = {
+  APIError: function (code, message) {
+    this.code = code || 'internal:unknown_error';
+    this.message = message || '';
+  },
   restify: (pathPrefix) => {
     // REST API前缀，默认为/api/:
     pathPrefix = pathPrefix || '/api/';
@@ -23,7 +27,27 @@ module.exports = {
           ctx.body = data;
           ctx.set('Authorization', token);
         }
-        await next();
+        try {
+          await next();
+        } catch (e) {
+          console.log('错误是')
+          // 返回错误:
+          if (e.message === 'Authentication Error') {
+            ctx.response.status = 401;
+            ctx.response.type = 'application/json';
+            ctx.response.body = {
+              code: e.code || 'authError:authError',
+              message: e.message || ''
+            };
+          } else {
+            ctx.response.status = 400;
+            ctx.response.type = 'application/json';
+            ctx.response.body = {
+              code: e.code || 'internal:unknown_error',
+              message: e.message || ''
+            };
+          }
+        }
       } else {
         await next();
       }

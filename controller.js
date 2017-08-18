@@ -38,6 +38,7 @@ function addControllers(router) {
   for (var f of js_files) {
     console.log(`处理 controller 每一项: ${f}...`);
     let mapping = require(__dirname + '/controllers/' + f);
+    console.log('mapping是：',mapping)
     addMapping(router, mapping);
   }
 }

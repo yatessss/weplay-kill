@@ -5,6 +5,7 @@ const config = require('../config');
 const model = require('../model');
 const axios = require('axios')
 const jwt = require('jsonwebtoken');
+const APIError = require('../rest').APIError;
 
 let Match = model.Match
 
@@ -19,6 +20,7 @@ var products = [{
 module.exports = {
   'GET /api/products': async (ctx, next) => {
     // 设置Content-Type:
+//    throw new APIError('product:not_found', 'product not found by id.');
     ctx.rest({
       data: products
     });
