@@ -125,9 +125,10 @@
         room_size: room_size
       },
       dataType: 'json',
-//      headers: {"Authorization": "Bearer " + localStorage.Authorization},
-      success () {
+      headers: {"Authorization": "Bearer " + localStorage.Authorization},
+      success (res) {
         console.log('发送成功')
+        location.href = res.redirect
       }
     })
   })

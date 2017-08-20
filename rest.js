@@ -23,14 +23,14 @@ module.exports = {
       if (ctx.request.path.startsWith(pathPrefix)) {
         // 绑定rest()方法:
         ctx.rest = (data, token) => {
+          ctx.set('Authorization', token);
           ctx.type = 'application/json';
           ctx.body = data;
-          ctx.set('Authorization', token);
         }
         try {
           await next();
         } catch (e) {
-          console.log('错误是')
+          console.log('错误是', e)
           // 返回错误:
           if (e.message === 'Authentication Error') {
             ctx.response.status = 401;

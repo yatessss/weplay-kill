@@ -8,6 +8,8 @@ const jwt = require('jsonwebtoken');
 const APIError = require('../rest').APIError;
 
 let Match = model.Match
+let Role = model.Role
+let WxInfo = model.WxInfo
 
 var products = [{
   name: 'iPhone',
@@ -25,6 +27,14 @@ module.exports = {
       data: products
     });
   },
+  'GET /api/search/:room_id': async (ctx, next) => {
+    // 设置Content-Type:
+//    throw new APIError('product:not_found', 'product not found by id.');
+    ctx.rest({
+      data: products
+    });
+  },
+
 
   'POST /api/create': async (ctx, next) => {
     let res = {
@@ -35,46 +45,92 @@ module.exports = {
       room_size: res.room_size,
       room_id: room_id,
     });
-    console.log('创建了: ' + JSON.stringify(match));
+    console.log('创建了房间的数据: ' + JSON.stringify(match));
+    // 解析jwt
+    console.log('header头',ctx.request.header)
+    let decoded = jwt.decode(ctx.request.header.authorization.slice(7));
+    console.log('authorization：',ctx.request.header.authorization,'token', decoded)
+    if (!decoded.openid) {
+       throw new APIError('Authentication Error', 'authError: decoded token openid is undefined');
+    }
+    console.log('decode', decoded)
+    let role = await Role.upsert({
+      open_id: decoded.openid,
+      user_room_id: room_id,
+      user_role: 'judge', // 代表法官
+      user_num: 0,  // 0 代表法官
+    });
+    console.log('创建了角色的数据: ' + JSON.stringify(role));
 
-    ctx.redirect(`/room/${room_id}`)
+    ctx.rest({redirect: `/room/${room_id}`});
   },
 
   'GET /api/getCode': async (ctx, next) => {
     console.log('接收到了网页发来的消息')
     const appid = 'wx470ba9b3c2e89e1f'
     const secret = 'd7232fd5d58f28245b803a72b8f185e2'
-    const code = ctx.request.query.code
+    const CODE = ctx.request.query.code
     let res = {}
-    await axios({
-      method:'get',
-      url:`https://api.weixin.qq.com/sns/oauth2/access_token?appid=${appid}&secret=${secret}&code=${code}&grant_type=authorization_code`,
-    }).then(function(response) {
-      console.log('发送成功了一个消息')
-      return response
-    }).then((response) => {
-      console.log(`https://api.weixin.qq.com/sns/userinfo?access_token=${response.data.access_token}&openid=${response.data.openid}&lang=zh_CN`,)
-      return axios({
-        method:'get',
-        url:`https://api.weixin.qq.com/sns/userinfo?access_token=${response.data.access_token}&openid=${response.data.openid}&lang=zh_CN`,
-      })
-    }).then((response)=> {
-      console.log('最后的数据', response)
-      /**
-       * { openid: 'o6xIfwDVXgk6N-CZGx-N3QYQvkr8',
-        nickname: 'xxx',
-        sex: 1,
-        language: 'zh_CN',
-        city: 'xxx',
-        province: 'xxx',
-        country: 'xxx',
-        headimgurl: 'xxxxx',
-        privilege: [] }
-       */
+    let token = ''
+    // 若果有code可以查到，直接去code当中openid  如果没有就去取openid 并更新
+    await WxInfo.findOne({where: {
+      code: CODE
+    }}).then(async (result) => {
+      if (!result) {
+        console.log('没找到这个code,结果是：',result)
+        await axios({
+          method:'get',
+          url:`https://api.weixin.qq.com/sns/oauth2/access_token?appid=${appid}&secret=${secret}&code=${CODE}&grant_type=authorization_code`,
+        }).then(function(response) {
+          console.log('发送成功了一个消息')
+          return response
+        }).then((response) => {
+          return axios({
+            method:'get',
+            url:`https://api.weixin.qq.com/sns/userinfo?access_token=${response.data.access_token}&openid=${response.data.openid}&lang=zh_CN`,
+          })
+        }).then((response)=> {
+          (async () => {
+            console.log('最后的数据', response.data, CODE)
+            /**
+             * { openid: 'o6xIfwDVXgk6N-CZGx-N3QYQvkr8',
+                nickname: 'xxx',
+                sex: 1,
+                language: 'zh_CN',
+                city: 'xxx',
+                province: 'xxx',
+                country: 'xxx',
+                headimgurl: 'xxxxx',
+                privilege: [] }
+             */
+            res = response.data
+            console.log('目前的const  res', res)
+            let wxinfo = await WxInfo.upsert({
+              open_id: response.data.openid,
+              nickname: response.data.nickname,
+              sex: response.data.sex,
+              language: response.data.language,
+              city: response.data.city,
+              province: response.data.province,
+              country: response.data.country,
+              head_img_url: response.data.headimgurl,
+              code: CODE
+            });
+            console.log('创建完了数据')
+          })();
+          token = jwt.sign({openid: res.openid},'wsd',{expiresIn: 24 * 60 * 60}); /* 1 days */
+          ctx.rest(res, token);
+          console.log('创建了: ' + JSON.stringify(wxinfo));
+        });
+      } else {
+        console.log('找到了这个code,结果是：',result)
+        res['open_id'] = result.dataValues.open_id
+        token = jwt.sign({openid: res.open_id},'wsd',{expiresIn: 24 * 60 * 60}); /* 1 days */
+        ctx.rest(res, token);
+      }
+    }).catch((err) => {
+      return err
+    })
 
-      res = response.data
-    });
-    var token = jwt.sign({openid: res.openid},'wsd',{expiresIn: 24 * 60 * 60}); /* 1 days */
-    ctx.rest(res, token);
   }
 };
