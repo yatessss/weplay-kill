@@ -21,15 +21,45 @@ var products = [{
 
 module.exports = {
   'GET /api/products': async (ctx, next) => {
-    // 设置Content-Type:
 //    throw new APIError('product:not_found', 'product not found by id.');
     ctx.rest({
       data: products
     });
   },
   'GET /api/search/:room_id': async (ctx, next) => {
-    // 设置Content-Type:
-//    throw new APIError('product:not_found', 'product not found by id.');
+    ctx.rest({
+      data: products
+    });
+  },
+  'POST /api/join': async (ctx, next) => {
+    let res = {
+      room_id: ctx.request.body.room_id,
+      user_num: ctx.request.body.user_num,
+      user_role: ctx.request.body.user_role
+    };
+    console.log('接收到join', res)
+    const roomInfo = await Match.findOne({
+      where: {room_id: res.room_id}
+    })
+    // TODO: 改成一至的key
+    const joinedNum = await Role.findAll({
+      where: {user_room_id: res.room_id}
+    })
+    if (joinedNum.length < roomInfo.room_size) {
+      console.log('目前房间没满可以加入')
+      let decoded = jwt.decode(ctx.request.header.authorization.slice(7));
+      if (!decoded.openid) {
+        throw new APIError('Authentication Error', 'authError: decoded token openid is undefined');
+      }
+      let role = await Role.upsert({
+        open_id: decoded.openid,
+        user_room_id: res.room_id,
+        user_role: res.user_role, // 代表法官
+        user_num: res.user_num,  // 0 代表法官
+      });
+    }
+    console.log('查找到的房间大小', roomInfo.room_size, '目前房间人数', joinedNum.length)
+
     ctx.rest({
       data: products
     });

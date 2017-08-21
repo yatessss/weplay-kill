@@ -16,11 +16,11 @@
                         <input type="text" class="form-control" id="room-id">
                     </div>
                     <div class="form-group">
-                        <label for="user-num" class="control-label">输入桌号:</label>
+                        <label for="user-num" class="control-label">输入玩家号码:</label>
                         <input type="text" class="form-control" id="user-num">
                     </div>
                     <div class="form-group" id="select-role">
-                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" id="role-button">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" data-role="" id="role-button">
                             选择角色
                             <span class="caret"></span>
                         </button>
@@ -46,7 +46,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary">确定</button>
+                <button type="button" class="btn btn-primary" id="join-room">确定</button>
             </div>
         </div>
     </div>
@@ -87,7 +87,8 @@
     }
     return theRequest;
   }
-  var appid = 'wx470ba9b3c2e89e1f'
+  var appid = 'wx470ba9b3c2e89e1f';
+
   $(function() {
     if (GetRequest().code) {
       $.ajax({
@@ -101,7 +102,11 @@
          console.log('发送成功/api/getCode');
          console.log(data);
          console.log(textStatus);
-         window.localStorage.Authorization = request.getResponseHeader('Authorization')
+         var token = request.getResponseHeader('Authorization');
+         window.localStorage.Authorization = token;
+         /* TODO 用正则优雅 */
+          var tmpStr  = token.substring(token.indexOf('.') + 1, token.lastIndexOf('.'))
+         window.localStorage.userInfo = atob(tmpStr)
         }
       })
       console.log('已经跳转回来')
@@ -113,6 +118,7 @@
 
   $('#select-role ul li').on('click', function (event) {
     $('#role-button').text($(this).text())
+    $('#role-button').data('role', event.target.dataset.role)
   });
 
   $('#create-room').click(function() {
@@ -123,6 +129,29 @@
       type: 'POST',
       data: {
         room_size: room_size
+      },
+      dataType: 'json',
+      headers: {"Authorization": "Bearer " + localStorage.Authorization},
+      success (res) {
+        console.log('发送成功')
+        location.href = res.redirect
+      }
+    })
+  })
+
+
+  $('#join-room').click(function() {
+    let room_id = $('#room-id')[0].value
+    let user_num = $('#user-num')[0].value
+    let user_role = $('#role-button').data('role')
+    console.log(room_id, user_num, user_role)
+    $.ajax({
+      url: 'http://zkibwu.natappfree.cc/api/join',
+      type: 'POST',
+      data: {
+        room_id: room_id,
+        user_num: user_num,
+        user_role: user_role
       },
       dataType: 'json',
       headers: {"Authorization": "Bearer " + localStorage.Authorization},
