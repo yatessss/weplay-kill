@@ -40,7 +40,12 @@ module.exports = {
     console.log('接收到join', res)
     const roomInfo = await Match.findOne({
       where: {room_id: res.room_id}
-    })
+    }).catch(() => {})
+
+    console.log(roomInfo)
+    if (!roomInfo) {
+      throw new APIError('Join Error', 'joinError: the room was not found');
+    }
     // TODO: 改成一至的key
     const joinedNum = await Role.findAll({
       where: {user_room_id: res.room_id}
@@ -57,6 +62,8 @@ module.exports = {
         user_role: res.user_role, // 代表法官
         user_num: res.user_num,  // 0 代表法官
       });
+    } else {
+      throw new APIError('Join Error', 'joinError: the room is fulled');
     }
     console.log('查找到的房间大小', roomInfo.room_size, '目前房间人数', joinedNum.length)
 
