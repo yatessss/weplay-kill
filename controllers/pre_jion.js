@@ -3,7 +3,7 @@
  */
 var fn_pre_join = async (ctx, next) => {
   ctx.render('pre-join.html', {
-    title: 'Welcome'
+    title: 'weplay桌游协会'
   });
 };
 

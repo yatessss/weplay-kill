@@ -14,7 +14,7 @@ module.exports = db.defineModel('roles', {
     primaryKey: true
   },
   // 用户房间id
-  user_room_id: {
+  room_id: {
     type: db.BIGINT(11)
   },
   // 用户的角色信息

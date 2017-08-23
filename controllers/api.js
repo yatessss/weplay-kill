@@ -26,7 +26,10 @@ module.exports = {
       data: products
     });
   },
+  // 查找房间信息接口
   'GET /api/search/:room_id': async (ctx, next) => {
+
+
     ctx.rest({
       data: products
     });
@@ -38,38 +41,47 @@ module.exports = {
       user_role: ctx.request.body.user_role
     };
     console.log('接收到join', res)
+    const decoded = jwt.decode(ctx.request.header.authorization.slice(7));
+    // 没有openid 直接返回错误
+    if (!decoded.openid) {
+      throw new APIError('Authentication Error', 'authError: decoded token openid is undefined');
+    }
     const roomInfo = await Match.findOne({
       where: {room_id: res.room_id}
     }).catch(() => {})
-
-    console.log(roomInfo)
+    // 没有查找到房间 返回错误
     if (!roomInfo) {
       throw new APIError('Join Error', 'joinError: the room was not found');
     }
-    // TODO: 改成一至的key
-    const joinedNum = await Role.findAll({
-      where: {user_room_id: res.room_id}
+    const role = await Role.findOne({
+      where: {open_id: decoded.openid}
     })
-    if (joinedNum.length < roomInfo.room_size) {
-      console.log('目前房间没满可以加入')
-      let decoded = jwt.decode(ctx.request.header.authorization.slice(7));
-      if (!decoded.openid) {
-        throw new APIError('Authentication Error', 'authError: decoded token openid is undefined');
-      }
-      let role = await Role.upsert({
-        open_id: decoded.openid,
-        user_room_id: res.room_id,
-        user_role: res.user_role, // 代表法官
-        user_num: res.user_num,  // 0 代表法官
-      });
+    // 后台接收到的都是string类型 所以用 ==
+    if (role.room_id == res.room_id) {
+      console.log('加入与自己的room_id相同',role, res)
+      ctx.rest({redirect: `/room/${res.room_id}`});
     } else {
-      throw new APIError('Join Error', 'joinError: the room is fulled');
-    }
-    console.log('查找到的房间大小', roomInfo.room_size, '目前房间人数', joinedNum.length)
+      console.log('加入与自己的room_id不同',role, res)
+      // TODO: 改成一至的key
+      const joinedNum = await Role.findAll({
+        where: {room_id: res.room_id}
+      })
+      if (joinedNum.length < roomInfo.room_size) {
+        console.log('目前房间没满可以加入')
 
-    ctx.rest({
-      data: products
-    });
+        await Role.upsert({
+          open_id: decoded.openid,
+          room_id: res.room_id,
+          user_role: res.user_role, // 代表法官
+          user_num: res.user_num,  // 0 代表法官
+        });
+      } else {
+        // 房间满了 返回错误
+        throw new APIError('Join Error', 'joinError: the room is fulled');
+      }
+      console.log('查找到的房间大小', roomInfo.room_size, '目前房间人数', joinedNum.length)
+      ctx.rest({redirect: `/room/${res.room_id}`});
+    }
   },
 
 
@@ -93,7 +105,7 @@ module.exports = {
     console.log('decode', decoded)
     let role = await Role.upsert({
       open_id: decoded.openid,
-      user_room_id: room_id,
+      room_id: room_id,
       user_role: 'judge', // 代表法官
       user_num: 0,  // 0 代表法官
     });
