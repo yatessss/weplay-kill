@@ -1,13 +1,54 @@
 {% extends "base.html" %} {% block main %}
-<div class="container">
+<div class="container" id="room-id" data-roomid={{room_id}}>
     <div class="row">
         <div class="col-md-12">
             <p>这是房间  id是 {{ room_id }}</p>
         </div>
     </div>
+    <div id="content"></div>
 </div>
+
+
+
+<script id="tpl-user" type="text/html">
+    <% for(var i = 0; i < allPlayers.length; i++){ %>
+    <%= i %> <%= allPlayers[i] %>
+    <% } %>
+</script>
 <script type="text/javascript">
-    var userInfo = JSON.parse(window.localStorage.userInfo)
-    console.log('userInfo', userInfo)
+    const userInfo = JSON.parse(window.localStorage.userInfo)
+    const roomId = $('#room-id')[0].dataset.roomid
+    console.log('userInfo', userInfo, roomId)
+
+    $(function() {
+        $.ajax({
+          url: 'http://zkibwu.natappfree.cc/api/search/' + roomId,
+          type: 'get',
+          data: {
+//            room_id: roomId
+          },
+          dataType: 'json',
+          headers: {"Authorization": "Bearer " + localStorage.Authorization},
+          success (data, textStatus, request) {
+            var html = template.render('tpl-user',data);
+            document.getElementById("content").innerHTML = html;
+            console.log(template)
+
+          }
+        })
+      var apply_list = '{{each list as his}}'+
+        '<li data-apply-id="{{his.id}}">'+
+        '<ul class="shop-attr-lst group">'+
+        '<li>店铺名:<a href="javascript:;">{{his.shop_name}}</a></li>'+
+        '<li>账户余额：{{his.shop_balance}}元</li>'+
+        '</ul>'+
+        '</li>'+
+        '{{/each}}';
+      var render = template.compile(apply_list);
+      var html = render(data);
+      $("#content").html("").html(html);
+      console.log('已经跳转回来')
+
+    });
 </script>
 {% endblock %}

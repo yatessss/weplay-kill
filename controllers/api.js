@@ -29,10 +29,30 @@ module.exports = {
   // 查找房间信息接口
   'GET /api/search/:room_id': async (ctx, next) => {
 
+    console.log('进入/api/search/:room_id接口')
+    const room_id = ctx.params.room_id;
+    console.log('收到的参数', room_id)
+    const decoded = jwt.decode(ctx.request.header.authorization.slice(7));
+    if (!decoded.openid) {
+      throw new APIError('Authentication Error', 'authError: decoded token openid is undefined');
+    }
+    const role = await Role.findOne({
+      where: {open_id: decoded.openid}
+    })
+    if (role.user_role !== 'judge') {
+      const allPlayers = await Role.findAll({
+        where: {room_id: room_id}
+      })
+      console.log('查找到的所有玩家信息', allPlayers)
+      ctx.rest({
+        allPlayers: allPlayers
+      });
+    }
+    // 如果不是法官 只展示 桌号 名字 信息
 
-    ctx.rest({
-      data: products
-    });
+    // 如果是法官 展示各玩家名字 角色等
+
+
   },
   'POST /api/join': async (ctx, next) => {
     let res = {
