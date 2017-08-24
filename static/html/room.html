@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="learn javascript by www.liaoxuefeng.com">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="/static/css/bootstrap.css">
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>    <script src="/static/js/bootstrap.js"></script>
+</head>
+
+<body>
+<header class="navbar navbar-static-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a href="/" class="navbar-brand">Learn JavaScript</a>
+        </div>
+        <nav class="collapse navbar-collapse" id="bs-navbar">
+            <ul class="nav navbar-nav">
+                <li><a target="_blank" href="http://www.liaoxuefeng.com/">Get Courses</a></li>
+                <li><a target="_blank" href="https://github.com/michaelliao/learn-javascript">Source Code</a></li>
+                <li><a target="_blank" href="http://getbootstrap.com/">Resource</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+<div class="container" id="room-id" data-roomid={{room_id}}>
+    <div class="row">
+        <div class="col-md-12">
+            <p>这是房间  id是 {{ room_id }}</p>
+        </div>
+    </div>
+    <div id="content">
+
+    </div>
+</div>
+
+<script type="text/javascript">
+  const userInfo = JSON.parse(window.localStorage.userInfo)
+  const roomId = $('#room-id')[0].dataset.roomid
+  console.log('userInfo', userInfo, roomId)
+
+  $(function() {
+    $.ajax({
+      url: 'http://zkibwu.natappfree.cc/api/search/' + roomId,
+      type: 'get',
+      data: {
+//            room_id: roomId
+      },
+      dataType: 'json',
+      headers: {"Authorization": "Bearer " + localStorage.Authorization},
+      success (data, textStatus, request) {
+        console.log(data)
+        var html = template.render('tpl-user',data);
+        document.getElementById("content").innerHTML = html;
+      }
+    })
+    console.log('已经跳转回来')
+
+  });
+</script>
+<footer style="background-color:#ddd; padding: 20px 0;">
+    <div class="container">
+        <p>weplay 桌游协会</p>
+        <p>狼人杀签到积分页面 v0.1beta</p>
+    </div>
+</footer>
+</body>
+<script src="/static/js/template-web.js"></script>
+<script type="text/javascript">
+  Function.prototype.getMultiLine = function () {
+    var lines = new String(this);
+    lines = lines.substring(lines.indexOf("/*") + 3, lines.lastIndexOf("*/"));
+    return lines;
+  }
+  var string = function () {
+      /*
+
+
+       ██╗    ██╗███████╗██████╗  █████╗ ███╗   ██╗██╗  ██╗
+       ██║    ██║██╔════╝██╔══██╗██╔══██╗████╗  ██║██║ ██╔╝
+       ██║ █╗ ██║█████╗  ██████╔╝███████║██╔██╗ ██║█████╔╝
+       ██║███╗██║██╔══╝  ██╔══██╗██╔══██║██║╚██╗██║██╔═██╗
+       ╚███╔███╔╝███████╗██████╔╝██║  ██║██║ ╚████║██║  ██╗
+       ╚══╝╚══╝ ╚══════╝╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝
+
+
+
+       ██╗    ██╗███████╗██████╗ ██╗      █████╗ ██╗   ██╗
+       ██║    ██║██╔════╝██╔══██╗██║     ██╔══██╗╚██╗ ██╔╝
+       ██║ █╗ ██║█████╗  ██████╔╝██║     ███████║ ╚████╔╝
+       ██║███╗██║██╔══╝  ██╔═══╝ ██║     ██╔══██║  ╚██╔╝
+       ╚███╔███╔╝███████╗██║     ███████╗██║  ██║   ██║
+       ╚══╝╚══╝ ╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝
+
+       ---------======  webank狼人杀协会，扫以下二维码加入  ========----------
+
+       */
+  }
+  window.console.info(string.getMultiLine());
+  console.log("%c    ","background: url(http://7xqch8.com1.z0.glb.clouddn.com/WechatIMG104-min.jpeg) no-repeat left center;background-size: 50% 100% ;font-size: 100px;","\n");
+
+
+</script>
+</html>

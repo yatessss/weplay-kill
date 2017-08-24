@@ -11,13 +11,6 @@ let Match = model.Match
 let Role = model.Role
 let WxInfo = model.WxInfo
 
-var products = [{
-  name: 'iPhone',
-  price: 6999
-}, {
-  name: 'Kindle',
-  price: 999
-}];
 
 module.exports = {
   'GET /api/products': async (ctx, next) => {
@@ -39,18 +32,32 @@ module.exports = {
     const role = await Role.findOne({
       where: {open_id: decoded.openid}
     })
+    // 如果不是法官 只展示 桌号 名字 信息
     if (role.user_role !== 'judge') {
       const allPlayers = await Role.findAll({
-        where: {room_id: room_id}
+        where: {room_id: room_id},
+        include:[WxInfo]
       })
       console.log('查找到的所有玩家信息', allPlayers)
       ctx.rest({
+        type: 'guest',
+        allPlayers: allPlayers
+      });
+    } else {
+      // 如果是法官 展示各玩家名字 角色等
+      const allPlayers = await Role.findAll({
+        where: {room_id: room_id},
+        include:[{
+          model: WxInfo
+        }]
+      })
+      console.log('查找到的所有玩家信息', allPlayers)
+      ctx.rest({
+        type: 'guest',
         allPlayers: allPlayers
       });
     }
-    // 如果不是法官 只展示 桌号 名字 信息
 
-    // 如果是法官 展示各玩家名字 角色等
 
 
   },
@@ -75,9 +82,9 @@ module.exports = {
     }
     const role = await Role.findOne({
       where: {open_id: decoded.openid}
-    })
+    }).catch(() => {})
     // 后台接收到的都是string类型 所以用 ==
-    if (role.room_id == res.room_id) {
+    if (role && role.room_id == res.room_id) {
       console.log('加入与自己的room_id相同',role, res)
       ctx.rest({redirect: `/room/${res.room_id}`});
     } else {
@@ -135,6 +142,7 @@ module.exports = {
   },
 
   'GET /api/getCode': async (ctx, next) => {
+
     console.log('接收到了网页发来的消息')
     const appid = 'wx470ba9b3c2e89e1f'
     const secret = 'd7232fd5d58f28245b803a72b8f185e2'
@@ -176,6 +184,7 @@ module.exports = {
             console.log('目前的const  res', res)
             let wxinfo = await WxInfo.upsert({
               open_id: response.data.openid,
+              roleOpenId: response.data.openid,
               nickname: response.data.nickname,
               sex: response.data.sex,
               language: response.data.language,
