@@ -111,7 +111,7 @@
   $(function() {
     if (GetRequest().code) {
       $.ajax({
-        url: 'http://zkibwu.natappfree.cc/api/getCode',
+        url: 'http://xhweg6.natappfree.cc/api/getCode',
         type: 'get',
         data: {
          code: GetRequest().code
@@ -130,7 +130,7 @@
       })
       console.log('已经跳转回来')
     } else {
-      location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+ appid +'&redirect_uri='+encodeURIComponent('http://zkibwu.natappfree.cc/pre-join/')+'&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
+      location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid='+ appid +'&redirect_uri='+encodeURIComponent('http://xhweg6.natappfree.cc/pre-join/')+'&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
     }
   });
 
@@ -144,7 +144,7 @@
     let room_size = $('#room-size')[0].value
     console.log(room_size)
     $.ajax({
-      url: 'http://zkibwu.natappfree.cc/api/create',
+      url: 'http://xhweg6.natappfree.cc/api/create',
       type: 'POST',
       data: {
         room_size: room_size
@@ -165,7 +165,7 @@
     let user_role = $('#role-button').data('role')
     console.log(room_id, user_num, user_role)
     $.ajax({
-      url: 'http://zkibwu.natappfree.cc/api/join',
+      url: 'http://xhweg6.natappfree.cc/api/join',
       type: 'POST',
       data: {
         room_id: room_id,

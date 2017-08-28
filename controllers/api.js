@@ -10,7 +10,8 @@ const APIError = require('../rest').APIError;
 let Match = model.Match
 let Role = model.Role
 let WxInfo = model.WxInfo
-
+Role.hasOne(WxInfo)
+WxInfo.belongsTo(Role)
 
 module.exports = {
   'GET /api/products': async (ctx, next) => {
@@ -34,9 +35,9 @@ module.exports = {
     })
     // 如果不是法官 只展示 桌号 名字 信息
     if (role.user_role !== 'judge') {
-      const allPlayers = await Role.findAll({
-        where: {room_id: room_id},
-        include:[WxInfo]
+      const allPlayers = await WxInfo.findAll({
+        where: {open_id: role.open_id},
+        include:[Role]
       })
       console.log('查找到的所有玩家信息', allPlayers)
       ctx.rest({
@@ -45,11 +46,11 @@ module.exports = {
       });
     } else {
       // 如果是法官 展示各玩家名字 角色等
-      const allPlayers = await Role.findAll({
-        where: {room_id: room_id},
-        include:[{
-          model: WxInfo
-        }]
+      const allPlayers = await WxInfo.findAll({
+        where: {open_id: role.open_id},
+        include:[Role]
+      }).then((res) => {
+        console.log('findall', res[0].dataValues.role)
       })
       console.log('查找到的所有玩家信息', allPlayers)
       ctx.rest({
@@ -182,18 +183,50 @@ module.exports = {
              */
             res = response.data
             console.log('目前的const  res', res)
-            let wxinfo = await WxInfo.upsert({
+
+            let wxinfo = await WxInfo.create({
               open_id: response.data.openid,
-              roleOpenId: response.data.openid,
               nickname: response.data.nickname,
               sex: response.data.sex,
+              roleOpenId: response.data.openid,
               language: response.data.language,
               city: response.data.city,
               province: response.data.province,
               country: response.data.country,
               head_img_url: response.data.headimgurl,
               code: CODE
-            });
+            },
+              {
+                include: [ Role ]
+              });
+              console.log('创建的WxInfo', wxinfo)
+
+            // Role.upsert({
+            //   open_id: response.data.openid,
+            //   room_id: 0,
+            //   user_role: '', // 代表法官
+            //   user_num: 0,  // 0 代表法官
+            // }).then((role) => {
+            //   console.log('创建的role')
+            //   let wxInfo = WxInfo.build({
+            //     open_id: response.data.openid,
+            //     roleOpenId: response.data.openid,
+            //     nickname: response.data.nickname,
+            //     sex: response.data.sex,
+            //     language: response.data.language,
+            //     city: response.data.city,
+            //     province: response.data.province,
+            //     country: response.data.country,
+            //     head_img_url: response.data.headimgurl,
+            //     code: CODE
+            //   });
+            //   Role.setWxInfo(wxInfo).then((res) => {
+            //     console.log('res', res)
+            //   });
+            //   console.log('创建的WxInfo', wxInfo)
+            //
+            // }).catch(next);
+
             console.log('创建完了数据')
           })();
           token = jwt.sign({openid: res.openid},'wsd',{expiresIn: 24 * 60 * 60}); /* 1 days */

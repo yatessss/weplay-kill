@@ -33,5 +33,15 @@ module.exports = db.defineModel('wxinfos', {
   },
   head_img_url: {
     type: db.STRING(200)
-  }
+  },
+  // roleOpenId: {
+  //   type: db.STRING(200),
+  //   field: 'roleOpenId',
+  //   unique: true,
+  //   references: {
+  //     model: 'roles',
+  //     key: 'open_id'
+  //   },
+  //   comment:'用户openId'
+  // }
 });
