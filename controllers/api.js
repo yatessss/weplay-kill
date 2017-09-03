@@ -20,6 +20,8 @@ module.exports = {
       data: products
     });
   },
+
+
   // 查找房间信息接口
   'GET /api/search/:room_id': async (ctx, next) => {
 
@@ -38,30 +40,27 @@ module.exports = {
       const allPlayers = await WxInfo.findAll({
         where: {open_id: role.open_id},
         include:[Role]
+      }).then(res => {
+        ctx.rest({
+          type: 'guest',
+          allPlayers: res
+        });
       })
-      console.log('查找到的所有玩家信息', allPlayers)
-      ctx.rest({
-        type: 'guest',
-        allPlayers: allPlayers
-      });
     } else {
       // 如果是法官 展示各玩家名字 角色等
       const allPlayers = await WxInfo.findAll({
         where: {open_id: role.open_id},
         include:[Role]
       }).then((res) => {
-        console.log('findall', res[0].dataValues.role)
+        ctx.rest({
+          type: 'host',
+          allPlayers: res
+        });
       })
-      console.log('查找到的所有玩家信息', allPlayers)
-      ctx.rest({
-        type: 'guest',
-        allPlayers: allPlayers
-      });
     }
-
-
-
   },
+
+
   'POST /api/join': async (ctx, next) => {
     let res = {
       room_id: ctx.request.body.room_id,

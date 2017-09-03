@@ -11,35 +11,83 @@
 </div>
 
 <script type="text/javascript">
-    const userInfo = JSON.parse(window.localStorage.userInfo)
-    const roomId = $('#room-id')[0].dataset.roomid
-    console.log('userInfo', userInfo, roomId)
+  const userInfo = JSON.parse(window.localStorage.userInfo)
+  const roomId = $('#room-id')[0].dataset.roomid
+  console.log('userInfo', userInfo, roomId)
+  $('#select-role').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    var recipient = button.data('whatever')
 
-    $(function() {
-        $.ajax({
-          url: 'http://xhweg6.natappfree.cc/api/search/' + roomId,
-          type: 'get',
-          data: {
+    // Extract info from data-* attributes
+    // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+    // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+    var modal = $(this)
+    modal.find('.modal-title').text('New message to ' + recipient)
+    modal.find('.modal-body input').val(recipient)
+  })
+  $(function() {
+    $.ajax({
+      url: 'http://xhweg6.natappfree.cc/api/search/' + roomId,
+      type: 'get',
+      data: {
 //            room_id: roomId
-          },
-          dataType: 'json',
-          headers: {"Authorization": "Bearer " + localStorage.Authorization},
-          success (data, textStatus, request) {
-            console.log(data)
-            var html = render(data);
-            document.getElementById("content").innerHTML = html;
-          }
-        })
-        console.log('已经跳转回来')
-      function render (data) {
-          let arr = ''
-          if (data.type === 'guest') {
-            data.allPlayers.map(item => {
-                arr = arr + `<p>${item.user_num}号玩家，${item.user_role}角色</p>`
-            })
-            return arr
-          }
+      },
+      dataType: 'json',
+      headers: {"Authorization": "Bearer " + localStorage.Authorization},
+      success (data, textStatus, request) {
+        console.log(data)
+        var html = render(data);
+        document.getElementById("content").innerHTML = html;
       }
+    })
+    console.log('已经跳转回来')
+    function render (data) {
+      let arr = ''
+      if (data.type === 'guest') {
+        data.allPlayers.map(item => {
+          arr = arr + `<p><img src="${item.head_img_url}" alt=""/><span>${item.nickname}</span>${item.role.user_num}号玩家</p>`
+        })
+        return arr
+      } else if (data.type === 'host') {
+        data.allPlayers.map(item => {
+          arr =
+            arr +
+            `<div>
+                <p><img style="width: 30px;height: 30px;" src="${item.head_img_url}" alt=""/><span>${item.nickname}</span>${item.role.user_num}号玩家，${item.role.user_role}角色</p>
+
+             </div>
+            `
+        })
+        arr = arr +
+          `
+            <div class="modal-body">
+                <form action="/api/join" method="post">
+                    <div class="form-group" id="select-role">
+                        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" data-role="" id="role-button">
+                            选择获胜阵营
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="#" data-role="role_villagers">好人阵营</a></li>
+                            <li>
+                                <a href="#" data-role="role_seer">狼人阵营</a></li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="join-room">确定</button>
+            </div>`
+        return arr
+      }
+    }
+
+    $('#content').on('click', '#select-role', function (event) {
+      console.log(event)
+      $('#role-button').text($(this).filter(".intro").text())
+      $('#role-button').data('role', event.target.dataset.role)
     });
+  });
 </script>
 {% endblock %}
