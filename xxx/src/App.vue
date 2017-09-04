@@ -1,23 +1,25 @@
 <template>
   <div id="app-container">
-    <router-view></router-view>
+    <transition name="list" mode="out-in">
+      <router-view></router-view>
+    </transition>
     <footer>
       <div >
-        <router-link to="/join">
+        <router-link to="/">
 
           <img class="coupon-image"  alt="">
           <p >游戏</p>
         </router-link>
       </div>
       <div>
-        <router-link to="/room">
+        <router-link to="/check">
 
         <img class="coupon-image"  alt="">
         <p >签到</p>
         </router-link>
       </div>
       <div >
-        <router-link to="/join">
+        <router-link to="/ranking">
 
           <img class="coupon-image"  alt="">
           <p >积分</p>
@@ -68,6 +70,20 @@ export default {
 </script>
 
 <style lang="scss" type="scss" rel="stylesheet/scss">
+
+  .list-item {
+    display: inline-block;
+    margin-right: 10px;
+  }
+  .list-enter-active, .list-leave-active {
+    transition: all .4s ease-in-out;
+  }
+  .list-enter, .list-leave-to
+    /* .list-leave-active for below version 2.1.8 */ {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+
 #app-container {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
