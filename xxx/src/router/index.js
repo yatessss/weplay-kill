@@ -14,7 +14,7 @@ export default new Router({
       path: '/',
       name: 'Hello',
       component: Home,
-      meta: {title: 'Home'}
+      meta: {title: 'webank桌游协会'}
     },
     {
       path: '/join',
@@ -25,17 +25,20 @@ export default new Router({
     {
       path: '/room',
       name: 'room',
-      component: Room
+      component: Room,
+      meta: {title: '游戏房间'}
     },
     {
       path: '/check',
       name: 'check',
-      component: Check
+      component: Check,
+      meta: {title: '签到'}
     },
     {
       path: '/ranking',
       name: 'ranking',
-      component: Ranking
+      component: Ranking,
+      meta: {title: '积分榜'}
     }
   ]
 })

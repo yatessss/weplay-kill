@@ -32,7 +32,7 @@ app.use(async (ctx, next) => {
 
 if (! isProduction) {
   let staticFiles = require('./static-files');
-  app.use(staticFiles('/', __dirname + '/xxx/dist'));
+  app.use(staticFiles('/static/', __dirname + '/xxx/dist'));
 }
 
 app.use(bodyParser());

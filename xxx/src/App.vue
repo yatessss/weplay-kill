@@ -35,37 +35,42 @@
   export default {
     data () {
       return {
-        msg: 'Welcome to Your Vue.js App'
+        msg: ''
       }
     },
     mounted () {
-      Function.prototype.getMultiLine = function () {
-        var lines = new String(this);
-        lines = lines.substring(lines.indexOf("/*") + 3, lines.lastIndexOf("*/"))
-        return lines
-      }
-      var string = function () {
-        /*
-         ██╗    ██╗███████╗██████╗  █████╗ ███╗   ██╗██╗  ██╗
-         ██║    ██║██╔════╝██╔══██╗██╔══██╗████╗  ██║██║ ██╔╝
-         ██║ █╗ ██║█████╗  ██████╔╝███████║██╔██╗ ██║█████╔╝
-         ██║███╗██║██╔══╝  ██╔══██╗██╔══██║██║╚██╗██║██╔═██╗
-         ╚███╔███╔╝███████╗██████╔╝██║  ██║██║ ╚████║██║  ██╗
-         ╚══╝╚══╝ ╚══════╝╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝
-         ██╗    ██╗███████╗██████╗ ██╗      █████╗ ██╗   ██╗
-         ██║    ██║██╔════╝██╔══██╗██║     ██╔══██╗╚██╗ ██╔╝
-         ██║ █╗ ██║█████╗  ██████╔╝██║     ███████║ ╚████╔╝
-         ██║███╗██║██╔══╝  ██╔═══╝ ██║     ██╔══██║  ╚██╔╝
-         ╚███╔███╔╝███████╗██║     ███████╗██║  ██║   ██║
-         ╚══╝╚══╝ ╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝
-
-         ---------======  webank狼人杀协会，扫以下二维码加入  ========---------
-
-         */
-      }
-      window.console.info(string.getMultiLine())
-      console.log("%c    ","background: url(http://7xqch8.com1.z0.glb.clouddn.com/WechatIMG104-min.jpeg) no-repeat left center;background-size: 50% 100% ;font-size: 100px;","\n");
+      this.console()
     },
+    methods: {
+      console () {
+        Function.prototype.getMultiLine = function () {
+          var lines = new String(this);
+          lines = lines.substring(lines.indexOf("/*") + 3, lines.lastIndexOf("*/"))
+          return lines
+        }
+        var string = function () {
+          /*
+           ██╗    ██╗███████╗██████╗  █████╗ ███╗   ██╗██╗  ██╗
+           ██║    ██║██╔════╝██╔══██╗██╔══██╗████╗  ██║██║ ██╔╝
+           ██║ █╗ ██║█████╗  ██████╔╝███████║██╔██╗ ██║█████╔╝
+           ██║███╗██║██╔══╝  ██╔══██╗██╔══██║██║╚██╗██║██╔═██╗
+           ╚███╔███╔╝███████╗██████╔╝██║  ██║██║ ╚████║██║  ██╗
+            ╚══╝╚══╝ ╚══════╝╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝
+           ██╗    ██╗███████╗██████╗ ██╗      █████╗ ██╗   ██╗
+           ██║    ██║██╔════╝██╔══██╗██║     ██╔══██╗╚██╗ ██╔╝
+           ██║ █╗ ██║█████╗  ██████╔╝██║     ███████║ ╚████╔╝
+           ██║███╗██║██╔══╝  ██╔═══╝ ██║     ██╔══██║  ╚██╔╝
+           ╚███╔███╔╝███████╗██║     ███████╗██║  ██║   ██║
+            ╚══╝╚══╝ ╚══════╝╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝
+
+---------======  webank狼人杀协会，扫以下二维码加入  ========---------
+
+           */
+        }
+        window.console.info(string.getMultiLine())
+        console.log("%c    ","background: url(http://7xqch8.com1.z0.glb.clouddn.com/WechatIMG104-min.jpeg) no-repeat left center;background-size: 50% 100% ;font-size: 100px;","\n");
+      }
+    }
   }
 </script>
 
@@ -76,7 +81,7 @@
     margin-right: 10px;
   }
   .list-enter-active, .list-leave-active {
-    transition: all .4s ease-in-out;
+    transition: all .3s ease-in-out;
   }
   .list-enter, .list-leave-to
     /* .list-leave-active for below version 2.1.8 */ {
@@ -118,7 +123,7 @@
     padding:0 0 100px 0;
     height: 100%;
     border-top: 2px solid #DEDEDE; /* px */
-    position: fixed;
+    position: relative;
     bottom: 0;
     left: 0;
     right: 0;

@@ -1,5 +1,5 @@
 <template>
-  <div class="hello">
+  <div class="home-wrap">
     <h1>{{ msg }}</h1>
     <h2>Essential Links</h2>
     <ul>
@@ -23,7 +23,10 @@
 <script>
   import NProgress from 'nprogress'
   import axios from '../axios'
+  import util from '../util'
 //  import util from '../util'
+  let appid = 'wx470ba9b3c2e89e1f'
+
   export default {
     name: 'hello',
     data () {
@@ -33,18 +36,34 @@
     },
     mounted () {
       NProgress.start()
-      axios({
-        method: 'get',
-        url: '/user/12345',
-        data: {
-          firstName: 'Fred',
-          lastName: 'Flintstone'
-        }
-      })
+      this.getCode()
     },
     methods: {
       handleClick: function () {
         this.$toast('Hello world!')
+      },
+      getCode () {
+        if (util.getRequestParams().code) {
+          axios({
+            method: 'get',
+            url: 'http://4gyrck.natappfree.cc/api/getCode',
+            data: {
+              code: util.getRequestParams().code
+            }
+          }).then((res) => {
+            console.log(res)
+            console.log('发送成功/api/getCode')
+            var token = res.headers.authorization
+            window.localStorage.Authorization = token
+            /* TODO 用正则优雅 */
+            var tmpStr = token.substring(token.indexOf('.') + 1, token.lastIndexOf('.'))
+            window.localStorage.userInfo = atob(tmpStr)
+          })
+
+          console.log('已经跳转回来')
+        } else {
+          location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid + '&redirect_uri=' + encodeURIComponent('http://4gyrck.natappfree.cc/static/index.html') + '&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
+        }
       }
     }
 
@@ -53,6 +72,9 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss" type="scss" rel="stylesheet/scss">
+  .home-wrap {
+    padding: 15px 5px;
+  }
 h1, h2 {
   font-weight: normal;
   font-size: 25px;
