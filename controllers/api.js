@@ -143,11 +143,12 @@ module.exports = {
 
   'GET /api/getCode': async (ctx, next) => {
 
-    console.log('接收到了网页发来的消息')
     const appid = 'wx470ba9b3c2e89e1f'
     const secret = 'd7232fd5d58f28245b803a72b8f185e2'
     const CODE = ctx.request.query.code
     let res = {}
+    console.log('接收到了网页发来的消息', ctx.request)
+
     let token = ''
     // 若果有code可以查到，直接去code当中openid  如果没有就去取openid 并更新
     await WxInfo.findOne({where: {

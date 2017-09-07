@@ -24,8 +24,8 @@
   import NProgress from 'nprogress'
   import axios from '../axios'
   import util from '../util'
+  import CONSTANT from '../../../constant'
 //  import util from '../util'
-  let appid = 'wx470ba9b3c2e89e1f'
 
   export default {
     name: 'hello',
@@ -43,11 +43,12 @@
         this.$toast('Hello world!')
       },
       getCode () {
+        console.log('获取到的code', util.getRequestParams().code)
         if (util.getRequestParams().code) {
           axios({
             method: 'get',
-            url: 'http://4gyrck.natappfree.cc/api/getCode',
-            data: {
+            url: '/api/getCode',
+            params: {
               code: util.getRequestParams().code
             }
           }).then((res) => {
@@ -62,7 +63,7 @@
 
           console.log('已经跳转回来')
         } else {
-          location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + appid + '&redirect_uri=' + encodeURIComponent('http://4gyrck.natappfree.cc/static/index.html') + '&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
+          location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + CONSTANT.APPID + '&redirect_uri=' + encodeURIComponent(CONSTANT.URL + '/static/index.html') + '&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect'
         }
       }
     }
