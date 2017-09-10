@@ -38,7 +38,7 @@ export default new Router({
       path: '/ranking',
       name: 'ranking',
       component: Ranking,
-      meta: {title: '积分榜'}
+      meta: {title: '加入游戏'}
     }
   ]
 })

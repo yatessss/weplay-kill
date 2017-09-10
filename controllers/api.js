@@ -14,10 +14,23 @@ Role.hasOne(WxInfo)
 WxInfo.belongsTo(Role)
 
 module.exports = {
+  'OPTIONS /api/create': async (ctx, next) => {
+//    throw new APIError('product:not_found', 'product not found by id.');
+    ctx.rest({
+      status: 'ok'
+    });
+  },
+  'OPTIONS /api/getCode': async (ctx, next) => {
+//    throw new APIError('product:not_found', 'product not found by id.');
+    ctx.rest({
+      status: 'ok'
+    });
+  },
+
   'GET /api/products': async (ctx, next) => {
 //    throw new APIError('product:not_found', 'product not found by id.');
     ctx.rest({
-      data: products
+      data: 'ok'
     });
   },
 
@@ -184,7 +197,7 @@ module.exports = {
             res = response.data
             console.log('目前的const  res', res)
 
-            let wxinfo = await WxInfo.create({
+            let wxinfo = await WxInfo.upsert({
               open_id: response.data.openid,
               nickname: response.data.nickname,
               sex: response.data.sex,
@@ -235,7 +248,7 @@ module.exports = {
         });
       } else {
         console.log('找到了这个code,结果是：',result)
-        res['open_id'] = result.dataValues.open_id
+        res = result.dataValues
         token = jwt.sign({openid: res.open_id},'wsd',{expiresIn: 24 * 60 * 60}); /* 1 days */
         ctx.rest(res, token);
       }

@@ -3,26 +3,30 @@
     <transition name="list" mode="out-in">
       <router-view></router-view>
     </transition>
+
     <footer>
       <div >
         <router-link to="/">
-
-          <img class="coupon-image"  alt="">
-          <p >游戏</p>
+          <p class="icon">
+            <Icon type="ios-game-controller-b"></Icon>
+            游戏
+          </p>
         </router-link>
       </div>
       <div>
         <router-link to="/check">
-
-          <img class="coupon-image"  alt="">
-          <p >签到</p>
+          <p class="icon">
+            <Icon type="calendar"></Icon>
+            签到
+          </p>
         </router-link>
       </div>
       <div >
-        <router-link to="/ranking">
-
-          <img class="coupon-image"  alt="">
-          <p >积分</p>
+        <router-link to="/ranking" >
+          <p class="icon">
+            <Icon type="more"></Icon>
+            更多
+          </p>
         </router-link>
       </div>
     </footer>
@@ -76,6 +80,8 @@
 
 <style lang="scss" type="scss" rel="stylesheet/scss">
   @import "./style/base.scss";
+  @import "style/iview.scss";
+
   .list-item {
     display: inline-block;
     margin-right: 10px;
@@ -140,9 +146,15 @@
     left: 0;
     right: 0;
     display: flex;
+    height: 50px;
+    justify-content: center;
+    align-items: center;
     background-color: #fff;
     > div {
       flex: 1;
+      .icon {
+        font-size: 15px;
+      }
       img {
         display: block;
         margin: 16px auto 8px;

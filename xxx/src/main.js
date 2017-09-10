@@ -8,12 +8,15 @@ import 'mint-ui/lib/style.css'
 import Flex from 'lib-flexible'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
+import iView from 'iview'
+import 'iview/dist/styles/iview.css'    // 使用 CSS
 
 Vue.config.productionTip = false
 
 Vue.use(Flex)
 Vue.use(MintUI)
 Vue.use(NProgress)
+Vue.use(iView)
 
 // 给每个页面不同title
 router.beforeEach((to, from, next) => {

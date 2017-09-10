@@ -23,6 +23,11 @@ module.exports = {
       if (ctx.request.path.startsWith(pathPrefix)) {
         // 绑定rest()方法:
         ctx.rest = (data, token) => {
+
+          ctx.set('Access-Control-Allow-Origin', '*');
+          ctx.set('Access-Control-Expose-Headers', 'Access-Token, Uid, Authorization');
+          ctx.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+          ctx.set('Access-Control-Allow-Headers', 'Authorization');
           ctx.set('Authorization', token);
           ctx.type = 'application/json';
           ctx.body = data;

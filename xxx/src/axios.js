@@ -8,15 +8,13 @@ import CONSTANT from '../../constant'
 // axios 配置
 axios.defaults.timeout = 5000
 axios.defaults.baseURL = CONSTANT.URL
-
+axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.Authorization
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 // http request 拦截器
 axios.interceptors.request.use(
   config => {
     console.log('已经接收到请求')
 
-    // if (store.state.token) {
-    //   config.headers.Authorization = `token ${store.state.token}`;
-    // }
     return config
   },
   err => {
@@ -28,7 +26,7 @@ axios.interceptors.request.use(
 // http response 拦截器
 axios.interceptors.response.use(
   response => {
-    console.log('已经接收到请求')
+    console.log('已经接收到请求', response)
     return response
   },
   error => {

@@ -45,7 +45,7 @@ app.use(templating('views', {
 
 app.use(koajwt({
   secret:'wsd'
-}).unless({path: [/^(?!.*\/api\/)/, /^\/api\/getCode/]}));
+}).unless({path: [/^(?!.*\/api\/)/, /^\/api\/getCode/], method: 'OPTIONS'}));
 
 app.use(controller());
 
