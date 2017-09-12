@@ -14,7 +14,7 @@ export default new Router({
       path: '/',
       name: 'Hello',
       component: Home,
-      meta: {title: 'webank桌游协会'}
+      meta: {title: 'weplay桌游协会'}
     },
     {
       path: '/join',
