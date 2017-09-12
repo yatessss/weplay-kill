@@ -23,7 +23,7 @@ export default new Router({
       meta: {title: '加入游戏'}
     },
     {
-      path: '/room',
+      path: '/room/:roomId',
       name: 'room',
       component: Room,
       meta: {title: '游戏房间'}

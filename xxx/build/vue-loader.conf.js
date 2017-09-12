@@ -1,6 +1,8 @@
 var utils = require('./utils')
 var config = require('../config')
 var isProduction = process.env.NODE_ENV === 'production'
+var autoprefixer = require('autoprefixer')
+var px2rem = require('postcss-px2rem')
 
 module.exports = {
   loaders: utils.cssLoaders({

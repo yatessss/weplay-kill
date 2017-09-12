@@ -3,18 +3,13 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import MintUI from 'mint-ui'
-import 'mint-ui/lib/style.css'
 import Flex from 'lib-flexible'
 import NProgress from 'nprogress'
-import 'nprogress/nprogress.css'
 import iView from 'iview'
-import 'iview/dist/styles/iview.css'    // 使用 CSS
 
 Vue.config.productionTip = false
 
 Vue.use(Flex)
-Vue.use(MintUI)
 Vue.use(NProgress)
 Vue.use(iView)
 

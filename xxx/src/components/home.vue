@@ -24,7 +24,7 @@
       title="加入游戏"
       @on-ok="joinOk"
       @on-cancel="joinCancel">
-      <Input v-model="joinRoomNum" placeholder="请输入房间号码" class="modal-item"></Input>
+      <Input v-model="joinRoomId" placeholder="请输入房间号码" class="modal-item"></Input>
       <Input v-model="joinPlayerNum" placeholder="请输入玩家桌号" class="modal-item"></Input>
       <Select v-model="joinPlayerRole" class="modal-item">
         <Option v-for="item in roleList" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -50,7 +50,7 @@
         },
         joinModalVisible: false,
         joinPlayerRole: '',
-        joinRoomNum: '',
+        joinRoomId: '',
         joinPlayerNum: '',
         createModalVisible: false,
         createValue: '',
@@ -111,12 +111,25 @@
             room_size: this.createValue
           }
 //          headers: {'Authorization': 'Bearer ' + localStorage.Authorization}
+        }).then((res) => {
+          this.$router.push({name: 'room', params: { roomId: res.data.room_id }})
         })
       },
       createCancel () {
       },
       joinOk () {
-
+        axios({
+          method: 'post',
+          url: '/api/join',
+          data: {
+            room_id: this.joinRoomId,
+            user_num: this.joinPlayerNum,
+            user_role: this.joinPlayerRole
+          }
+//          headers: {'Authorization': 'Bearer ' + localStorage.Authorization}
+        }).then((res) => {
+          this.$router.push({name: 'room', params: { roomId: res.data.room_id }})
+        })
       },
       joinCancel () {
       },

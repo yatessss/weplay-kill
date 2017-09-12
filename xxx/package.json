@@ -47,6 +47,7 @@
     "opn": "^5.1.0",
     "optimize-css-assets-webpack-plugin": "^2.0.0",
     "ora": "^1.2.0",
+    "postcss-cssnext": "^3.0.2",
     "postcss-loader": "^2.0.6",
     "postcss-px2rem": "^0.3.0",
     "rimraf": "^2.6.0",

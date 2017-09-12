@@ -1,7 +1,7 @@
 <template>
   <div id="app-container">
     <transition name="list" mode="out-in">
-      <router-view></router-view>
+      <router-view class="router-wrap"></router-view>
     </transition>
 
     <footer>
@@ -78,7 +78,7 @@
   }
 </script>
 
-<style lang="scss" type="scss" rel="stylesheet/scss">
+<style lang="scss" rel="stylesheet/scss">
   @import "./style/base.scss";
   @import "style/iview.scss";
 
@@ -124,7 +124,10 @@
   em {
     font-style: normal;
   }
-
+  .router-wrap {
+    flex: 1;
+    padding: 15px 10px;
+  }
   #app-container {
     padding:0 0 100px 0;
     height: 100%;

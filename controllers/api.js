@@ -26,6 +26,18 @@ module.exports = {
       status: 'ok'
     });
   },
+  'OPTIONS /api/join': async (ctx, next) => {
+//    throw new APIError('product:not_found', 'product not found by id.');
+    ctx.rest({
+      status: 'ok'
+    });
+  },
+  'OPTIONS /api/search/:room_id': async (ctx, next) => {
+//    throw new APIError('product:not_found', 'product not found by id.');
+    ctx.rest({
+      status: 'ok'
+    });
+  },
 
   'GET /api/products': async (ctx, next) => {
 //    throw new APIError('product:not_found', 'product not found by id.');
@@ -40,7 +52,7 @@ module.exports = {
 
     console.log('进入/api/search/:room_id接口')
     const room_id = ctx.params.room_id;
-    console.log('收到的参数', room_id)
+    console.log('收到的参数', room_id, ctx.request)
     const decoded = jwt.decode(ctx.request.header.authorization.slice(7));
     if (!decoded.openid) {
       throw new APIError('Authentication Error', 'authError: decoded token openid is undefined');
@@ -99,7 +111,11 @@ module.exports = {
     // 后台接收到的都是string类型 所以用 ==
     if (role && role.room_id == res.room_id) {
       console.log('加入与自己的room_id相同',role, res)
-      ctx.rest({redirect: `/room/${res.room_id}`});
+      ctx.rest({
+        status: 'ok',
+        status_code: 200,
+        room_id: res.room_id
+      });
     } else {
       console.log('加入与自己的room_id不同',role, res)
       // TODO: 改成一至的key
@@ -120,7 +136,11 @@ module.exports = {
         throw new APIError('Join Error', 'joinError: the room is fulled');
       }
       console.log('查找到的房间大小', roomInfo.room_size, '目前房间人数', joinedNum.length)
-      ctx.rest({redirect: `/room/${res.room_id}`});
+      ctx.rest({
+        status: 'ok',
+        status_code: 200,
+        room_id: res.room_id
+      });
     }
   },
 
@@ -151,7 +171,11 @@ module.exports = {
     });
     console.log('创建了角色的数据: ' + JSON.stringify(role));
 
-    ctx.rest({redirect: `/room/${room_id}`});
+    ctx.rest({
+      status: 'ok',
+      status_code: 200,
+      room_id: room_id
+    });
   },
 
   'GET /api/getCode': async (ctx, next) => {

@@ -4,7 +4,7 @@ var utils = require('./utils')
 var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
 var autoprefixer = require('autoprefixer')
-var px2rem = require('postcss-px2rem');
+var px2rem = require('postcss-px2rem')
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -67,19 +67,30 @@ module.exports = {
         }
       },
       {
-        test: /\.(less|css)$/,
-        use: ['style-loader', 'css-loader', 'less-loader','postcss-loader'],
+        test: /\.(less|css|scss|sass)$/,
+        loader: "style-loader!css-loader!postcss-loader",
         include: [
           /src/,
-          '/node_modules/mint-ui/lib/' //增加此项,后面引入mint-ui时需要
-        ]
+          '/node_modules/iview/dist/style/' //增加此项,后面引入mint-ui时需要
+        ],
+        options: {
+          postcss: [require('postcss-px2rem')({
+            baseDpr: 2,             // base device pixel ratio (default: 2)
+            threeVersion: false,    // whether to generate @1x, @2x and @3x version (default: false)
+            remVersion: true,       // whether to generate rem version (default: true)
+            remUnit: 37.5,            // rem unit value (default: 75)
+            remPrecision: 6         // rem precision (default: 6)
+          })]
+        }
       },
       {
         test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
-        loader: 'url-loader',
+        loader: 'file-loader',
         options: {
+          publicPath: '/static/',
+          outputPath: 'static/',
           limit: 10000,
-          name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
+          name: '/fonts/[name].[hash:7].[ext]'
         }
       }
     ]
