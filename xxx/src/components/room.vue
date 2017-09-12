@@ -1,6 +1,7 @@
 <template>
   <div class="hello">
     <h1>欢迎来到{{roomId}}号房间</h1>
+    <Table :columns="columns1" :data="data1"></Table>
   </div>
 </template>
 
@@ -11,7 +12,42 @@
     name: 'hello',
     data () {
       return {
-        roomId: this.$route.params.roomId
+        roomId: this.$route.params.roomId,
+        columns1: [
+          {
+            title: '玩家',
+            key: 'user',
+            render: (h, params) => {
+              return h('div', [
+                h('Avatar', {
+                  props: {
+                    src: params.row.head_img_url
+                  }
+                }),
+                h('span', params.row.nickname)
+              ])
+            }
+          },
+          {
+            title: '桌号',
+            key: 'userNum',
+            render: (h, params) => {
+              return h('div', [
+                h('span', params.row.role.user_num)
+              ])
+            }
+          },
+          {
+            title: '角色',
+            key: 'role',
+            render: (h, params) => {
+              return h('div', [
+                h('span', params.row.role.user_role)
+              ])
+            }
+          }
+        ],
+        data1: []
       }
     },
     mounted () {
@@ -27,7 +63,8 @@
           method: 'get',
           url: `/api/search/${this.$route.params.roomId}`
         }).then(res => {
-          console.log(res)
+          this.$set(this, 'data1', res.data.allPlayers)
+          console.log(this.data1)
         })
       }
     }
