@@ -85,9 +85,36 @@ let Cookie = (function () {
   }
 })()
 
+let filterRole = function (str) {
+  switch (str) {
+    case 'role_villagers':
+      return '平民'
+    case 'role_seer':
+      return '平民'
+    case 'role_idiot':
+      return '预言家'
+    case 'role_savior':
+      return '守卫'
+    case 'role_witch':
+      return '女巫'
+    case 'role_knight':
+      return '骑士'
+    case 'role_hunter':
+      return '猎人'
+    case 'role_werewolves':
+      return '狼人'
+    case 'role_white_werewolf':
+      return '白狼王'
+    case 'role_beauty_werewolf':
+      return '狼美人'
+
+  }
+}
+
 exports.isWX = isWX()
 exports.isAPP = isAPP()
 exports.getRequestParams = getRequestParams
 exports.checkEmail = checkEmail
 exports.Cookie = Cookie
 exports.setTitle = setTitle
+exports.filterRole = filterRole

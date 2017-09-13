@@ -10,8 +10,8 @@ const APIError = require('../rest').APIError;
 let Match = model.Match
 let Role = model.Role
 let WxInfo = model.WxInfo
-Role.hasOne(WxInfo)
-WxInfo.belongsTo(Role)
+WxInfo.hasOne(Role)
+Role.belongsTo(WxInfo)
 
 module.exports = {
   'OPTIONS /api/create': async (ctx, next) => {
@@ -62,9 +62,9 @@ module.exports = {
     })
     // 如果不是法官 只展示 桌号 名字 信息
     if (role.user_role !== 'judge') {
-      const allPlayers = await WxInfo.findAll({
-        where: {open_id: role.open_id},
-        include:[Role]
+      const allPlayers = await Role.findAll({
+        where: {room_id: role.room_id},
+        include:[WxInfo]
       }).then(res => {
         ctx.rest({
           type: 'guest',
@@ -73,9 +73,9 @@ module.exports = {
       })
     } else {
       // 如果是法官 展示各玩家名字 角色等
-      const allPlayers = await WxInfo.findAll({
-        where: {open_id: role.open_id},
-        include:[Role]
+      const allPlayers = await Role.findAll({
+        where: {room_id: role.room_id},
+        include:[WxInfo]
       }).then((res) => {
         ctx.rest({
           type: 'host',
@@ -130,6 +130,7 @@ module.exports = {
           room_id: res.room_id,
           user_role: res.user_role, // 代表法官
           user_num: res.user_num,  // 0 代表法官
+          wxinfoOpenId: decoded.openid
         });
       } else {
         // 房间满了 返回错误
@@ -168,6 +169,7 @@ module.exports = {
       room_id: room_id,
       user_role: 'judge', // 代表法官
       user_num: 0,  // 0 代表法官
+      wxinfoOpenId: decoded.openid
     });
     console.log('创建了角色的数据: ' + JSON.stringify(role));
 

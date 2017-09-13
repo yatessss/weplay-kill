@@ -8,6 +8,7 @@
 <script>
   import axios from '../axios'
   import NProgress from 'nprogress'
+  import util from '../util'
   export default {
     name: 'hello',
     data () {
@@ -15,16 +16,24 @@
         roomId: this.$route.params.roomId,
         columns1: [
           {
-            title: '玩家',
-            key: 'user',
+            title: '头像',
+            key: 'avatar',
             render: (h, params) => {
               return h('div', [
                 h('Avatar', {
                   props: {
-                    src: params.row.head_img_url
+                    src: params.row.wxinfo.head_img_url
                   }
-                }),
-                h('span', params.row.nickname)
+                })
+              ])
+            }
+          },
+          {
+            title: '玩家',
+            key: 'user',
+            render: (h, params) => {
+              return h('div', [
+                h('span', params.row.wxinfo.nickname)
               ])
             }
           },
@@ -33,7 +42,7 @@
             key: 'userNum',
             render: (h, params) => {
               return h('div', [
-                h('span', params.row.role.user_num)
+                h('span', params.row.user_num)
               ])
             }
           },
@@ -42,7 +51,7 @@
             key: 'role',
             render: (h, params) => {
               return h('div', [
-                h('span', params.row.role.user_role)
+                h('span', util.filterRole(params.row.user_role))
               ])
             }
           }

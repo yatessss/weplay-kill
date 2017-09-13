@@ -6,8 +6,8 @@ const model = require('./model.js');
 let Match = model.Match
 let Role = model.Role
 let WxInfo = model.WxInfo
-Role.hasOne(WxInfo)
-WxInfo.belongsTo(Role)
+WxInfo.hasOne(Role)
+Role.belongsTo(WxInfo)
 model.sync().then(()=>{
   console.log('@@@@@@@@@@@@@创建完成');
   process.exit(0);
